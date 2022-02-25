@@ -1,0 +1,7 @@
+{
+  "name": "@wcd/mparrella823.lwc-l02lrvza-fork-l02lxxy6",
+  "version": "0.0.0",
+  "scripts": {
+    "serve": "npx wcd-cli@latest serve VKDcnJsN5OGhCKvf3lMb --open"
+  }
+}

@@ -1,0 +1,39 @@
+<template>
+	<table id="productTable"
+		class="slds-table slds-table_bordered slds-border_left slds-border_right slds-p-bottom_large">
+		<thead>
+			<tr>
+				<th scope="col">
+					<div class="theadText" title="Product">Product</div>
+				</th>
+				<th scope="col" class="slds-wrap slds-cell-wrap">
+					<div class="theadText" title="Aircraft"><a data-id="aircraft" onclick={sortRows}>Aircraft</a></div>
+				</th>
+				<th scope="col" class="slds-cell-wrap">
+					<div class="theadText" title="System Tail">System Tail</div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<template for:each={apgTails} for:item="record">
+				<tr key={record.quoteLineId} data-target-id={record.quoteLineId}>
+					<td key={record.quoteLineId} hidden>
+						<div class="slds-cell-wrap">{record.quoteLineId}</div>
+					</td>
+					<td key={record.quoteLineId} class="td-fixed-width">
+						<div class="slds-cell-wrap">{record.productName}</div>
+					</td>
+					<td key={record.quoteLineId}>
+						<div class="slds-cell-wrap">{record.aircraftName}</div>
+					</td>
+					<td key={record.quoteLineId} class="tail-dropdown">
+						<lightning-combobox name="availableTails" label="System Tail" value={record.selectedTail.value}
+							placeholder="Select a System Tail" options={record.sysTailWrappers} onchange={handleChange}
+							data-id={record.quoteLineId} variant="label-hidden" onfocus={handleFocus} disabled={record.isRegistered}>
+						</lightning-combobox>
+					</td>
+				</tr>
+			</template>
+		</tbody>
+	</table>
+</template>
