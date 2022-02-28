@@ -27,10 +27,7 @@
 						<div class="slds-cell-wrap">{record.aircraftName}</div>
 					</td>
 					<td key={record.quoteLineId} class="tail-dropdown">
-						<lightning-combobox name="availableTails" label="System Tail" value={record.selectedTail.value}
-							placeholder="Select a System Tail" options={record.sysTailWrappers} onchange={handleChange}
-							data-id={record.quoteLineId} variant="label-hidden" onfocus={handleFocus} disabled={record.isRegistered}>
-						</lightning-combobox>
+						<c-child sys-tails-list={record.sysTailWrappers}></c-child>
 					</td>
 				</tr>
 			</template>

@@ -1,17 +1,27 @@
-import { LightningElement } from "lwc";
+import { LightningElement, track } from "lwc";
 
 let apgSelectOptions = [
   {
+    id: 0,
+    label: 'Select a System Tail...',
+    value: '',
+    disabled: null
+  },
+  {
+    id: 1,
     label: 'APG - PLANE - A123',
-    value: 'abc123def456'
+    value: 'abc123def456',
+    disabled: null
   },
   {
     label: 'APG - PLANE - B321',
-    value: '456def123abc'
+    value: '456def123abc',
+    disabled: null
   },
   {
     label: 'APG - PLANE - C213',
-    value: 'abcdef123456'
+    value: 'abcdef123456',
+    disabled: null
   }
 ];
 
@@ -64,12 +74,31 @@ export default class App extends LightningElement {
   title = "Testing new custom select";
 
   apgTails = testQuoteLineData;
+  @track quoteLineData = testQuoteLineData;
+  
+  @track apgSelectData = apgSelectOptions;
 
   selected;
 
   handleChange(event){
-    console.log(event);
     this.selected = event.target.value;
+    let tempTails = this.apgSelectData.map(item =>  ({...item}));
+    tempTails.forEach((item) => 
+      {
+        if (item.value === this.selected){ 
+          item.disabled = true;
+        }
+      }        
+    );
+    this.apgSelectData = JSON.parse(JSON.stringify(tempTails));
+    let tempData = this.quoteLineData.map(item => ({...item}));
+    tempData = JSON.parse(JSON.stringify(tempData));
+    tempData.forEach((item) => {
+      item = JSON.parse(JSON.stringify(item));
+      item.sysTailWrappers = this.apgSelectData;
+    });
+    console.log('placeholdertwo: ',   JSON.parse(JSON.stringify(tempData)));
+    this.quoteLineData = JSON.parse(JSON.stringify(tempData));
   }
 
 }
