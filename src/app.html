@@ -15,6 +15,9 @@
 				<th scope="col" class="slds-cell-wrap">
 					<div class="theadText" title="Selected System Tail">Selected System Tail</div>
 				</th>
+				<th scope="col" class="slds-cell-wrap">
+					<div class="theadText" title="remove">Clear Assignment</div>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -37,6 +40,13 @@
 					</td>
 					<td key={record.quoteLineId} class="selected-tail">
 						<div class="slds-cell-wrap">{record.selectedTail.label}</div>
+					</td>
+					<td key={record.quoteLineId} class="clear-selection">
+						<template if:true={record.isRegistered}>
+							<lightning-icon icon-name="action:delete" data-id={record.quoteLineId} alternative-text="cancel"
+								title="Delete" size="x-small" onclick={handleIconClick}>
+							</lightning-icon>
+						</template>
 					</td>
 				</tr>
 			</template>

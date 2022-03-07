@@ -70,7 +70,7 @@ export default class App extends LightningElement {
   connectedCallback(){
     apgSelectOptions.forEach(item => {
       this.tailNameMap.set(item.value, item.label);
-    })
+    });
   }
 
   handleChange(event){
@@ -80,17 +80,39 @@ export default class App extends LightningElement {
     dataClone = JSON.parse(JSON.stringify(this.apgTails));
     dataClone.forEach(item => {
       if (item.quoteLineId === event.target.dataset.id){
+        item.isRegistered = true;
         item.selectedTail = {
           value : event.target.value,
           label : this.tailNameMap.get(event.target.value)
-        };
+        };        
         tailClone = item.sysTailWrappers.filter(item => item.value !== event.target.value);
-      }      
+      } // End row-level edits      
         item.sysTailWrappers = tailClone;
     });
-
+    
     this.apgTails = dataClone;
     
+  }
+
+  handleIconClick(event){
+    let dataClone = [];
+    let tailClone = [];
+    
+    dataClone = JSON.parse(JSON.stringify(this.apgTails));
+    let selectedValue = '';
+    dataClone.forEach(item => {
+      if (item.quoteLineId === event.target.dataset.id){
+        item.isRegistered = false;
+        selectedValue = item.selectedTail;
+        item.selectedTail = {};   
+      }
+      console.log(tailClone);
+      tailClone = JSON.parse(JSON.stringify(item.sysTailWrappers));
+      tailClone.push({label: this.tailNameMap.get(selectedValue.value), value: selectedValue.value}); 
+      console.log(tailClone);
+      item.sysTailWrappers = tailClone;
+    });
+    this.apgTails = dataClone;
   }
 
 }
