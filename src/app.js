@@ -64,12 +64,33 @@ export default class App extends LightningElement {
   title = "Testing new custom select";
 
   apgTails = testQuoteLineData;
-
+  tailNameMap = new Map();
   selected;
 
+  connectedCallback(){
+    apgSelectOptions.forEach(item => {
+      this.tailNameMap.set(item.value, item.label);
+    })
+  }
+
   handleChange(event){
-    console.log(event);
+    let tailClone = [];
     this.selected = event.target.value;
+    let dataClone = [];
+    dataClone = JSON.parse(JSON.stringify(this.apgTails));
+    dataClone.forEach(item => {
+      if (item.quoteLineId === event.target.dataset.id){
+        item.selectedTail = {
+          value : event.target.value,
+          label : this.tailNameMap.get(event.target.value)
+        };
+        tailClone = item.sysTailWrappers.filter(item => item.value !== event.target.value);
+      }      
+        item.sysTailWrappers = tailClone;
+    });
+
+    this.apgTails = dataClone;
+    
   }
 
 }
