@@ -12,6 +12,9 @@
 				<th scope="col" class="slds-cell-wrap">
 					<div class="theadText" title="System Tail">System Tail</div>
 				</th>
+				<th scope="col" class="slds-cell-wrap">
+					<div class="theadText" title="Selected System Tail">Selected System Tail</div>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -29,8 +32,11 @@
 					<td key={record.quoteLineId} class="tail-dropdown">
 						<lightning-combobox name="availableTails" label="System Tail" value={record.selectedTail.value}
 							placeholder="Select a System Tail" options={record.sysTailWrappers} onchange={handleChange}
-							data-id={record.quoteLineId} variant="label-hidden" onfocus={handleFocus} disabled={record.isRegistered}>
+							data-id={record.quoteLineId} variant="label-hidden" disabled={record.isRegistered}>
 						</lightning-combobox>
+					</td>
+					<td key={record.quoteLineId} class="selected-tail">
+						<div class="slds-cell-wrap">{record.selectedTail.label}</div>
 					</td>
 				</tr>
 			</template>
