@@ -15,6 +15,17 @@ let apgSelectOptions = [
   }
 ];
 
+let rrSelectOptions = [
+  { 
+    label: 'RR - PLANE - D323',
+    value: 'asdf23523sdfi'
+  },
+  {
+    label: 'RR - PLANE - XF34',
+    value: 'an0239fask'
+  }
+];
+
 let testQuoteLineData = [
   {
     aircraftId: 'abc12345',
@@ -27,8 +38,7 @@ let testQuoteLineData = [
     selectedTail: {
       value : '',
       label : ''
-    },
-    sysTailWrappers: apgSelectOptions
+    }
   },
   {
     aircraftId: 'def4567',
@@ -41,8 +51,7 @@ let testQuoteLineData = [
     selectedTail: {
       value : '',
       label : ''
-    },
-    sysTailWrappers: apgSelectOptions
+    }
   },
   {
     aircraftId: 'ghi7890',
@@ -55,22 +64,59 @@ let testQuoteLineData = [
     selectedTail: {
       value : '',
       label : ''
-    },
-    sysTailWrappers: apgSelectOptions
+    }
   },
+  {
+    aircraftId: 'pps3423',
+    aircraftName: 'PLANE2',
+    isRegistered: false,
+    listTag: 'RocketRoute|PLANE1|PRODUCT1',
+    productFamily: 'RocketRoute',
+    productName: 'PRODUCT1',
+    quoteLineId: '3435423f',
+    selectedTail: {
+      value : '',
+      label : ''
+    }
+  }
 ];
+
+let mockedListSortData = new Map();
+mockedListSortData.set('RocketRoute|PLANE1|PRODUCT1', [{label: 'rrtest', value: 'rrtest1'}, {label: 'rrtest2', value: 'rrtest2'}]);
+mockedListSortData.set('APG|PLANE1|PRODUCT1', [{label: 'apgtest1', value: 'apgtest1'}, {label: 'apgtest2', value:'apgtest2'}]);
+
 
 export default class App extends LightningElement {
   title = "Testing new custom select";
 
   apgTails = testQuoteLineData;
   tailNameMap = new Map();
+  picklistMaps = new Map();
   selected;
 
   connectedCallback(){
     apgSelectOptions.forEach(item => {
       this.tailNameMap.set(item.value, item.label);
     });
+
+    let dataClone = [];
+    dataClone = JSON.parse(JSON.stringify(this.apgTails));
+    dataClone.forEach(item =>{
+      if (mockedListSortData.has(item.listTag)){
+        this.picklistMaps.set(item.listTag, mockedListSortData.get(item.listTag));
+      }
+    });
+
+    dataClone.forEach(item => {
+      item.sysTailWrappers = this.picklistMaps.get(item.listTag);
+    })
+
+    this.apgTails = dataClone;
+    this.picklistMaps.forEach((item,key) => {
+      // let test = JSON.parse(JSON.stringify(item));
+      console.log(`Key: ${key}  |  Value: ${item}`);
+    });
+
   }
 
   handleChange(event){
@@ -84,13 +130,13 @@ export default class App extends LightningElement {
         item.selectedTail = {
           value : event.target.value,
           label : this.tailNameMap.get(event.target.value)
-        };        
-        tailClone = item.sysTailWrappers.filter(item => item.value !== event.target.value);
+        };          
+        tailClone = this.picklistMaps.get(item.listTag).filter(item => item.value !== event.target.value);
       } // End row-level edits      
-        item.sysTailWrappers = tailClone;
+        this.picklistMaps.set(item.listTag,tailClone);
     });
     
-    this.apgTails = dataClone;
+    this.apgTails = dataClone;  
     
   }
 
@@ -98,21 +144,8 @@ export default class App extends LightningElement {
     let dataClone = [];
     let tailClone = [];
     
-    dataClone = JSON.parse(JSON.stringify(this.apgTails));
-    let selectedValue = '';
-    dataClone.forEach(item => {
-      if (item.quoteLineId === event.target.dataset.id){
-        item.isRegistered = false;
-        selectedValue = item.selectedTail;
-        item.selectedTail = {};   
-      }
-      console.log(tailClone);
-      tailClone = JSON.parse(JSON.stringify(item.sysTailWrappers));
-      tailClone.push({label: this.tailNameMap.get(selectedValue.value), value: selectedValue.value}); 
-      console.log(tailClone);
-      item.sysTailWrappers = tailClone;
-    });
-    this.apgTails = dataClone;
+    dataClone = JSON.parse(JSON.stringify(this.testQuoteLineData));
+   
   }
 
 }
