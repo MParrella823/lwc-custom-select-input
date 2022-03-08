@@ -92,6 +92,7 @@ export default class App extends LightningElement {
   apgTails = testQuoteLineData;
   tailNameMap = new Map();
   picklistMaps = new Map();
+  origPicklistMaps = new Map();
   selected;
 
   connectedCallback(){
@@ -111,8 +112,11 @@ export default class App extends LightningElement {
     dataClone.forEach(item =>{
       if (mockedListSortData.has(item.listTag)){
         this.picklistMaps.set(item.listTag, mockedListSortData.get(item.listTag));
+        this.origPicklistMaps.set(item.listTag, mockedListSortData.get(item.listTag));
       }
     });
+
+    // Clone the picklist map in case we reset all fields
 
     // Iterate over the quote lines and set the select options to the appropriate list from the 'picklistMap'
     dataClone.forEach(item => {
@@ -173,6 +177,23 @@ export default class App extends LightningElement {
        }
      });
      this.apgTails = dataClone;
+  }
+
+  handleClearAll(){
+    let dataClone = [];
+    dataClone = JSON.parse(JSON.stringify(this.apgTails));
+    dataClone.forEach(item => {
+        item.isRegistered = false;
+        let tempTail = [];
+        tempTail = this.picklistMaps.get(item.listTag);
+        if (item.selectedTail !== null && item.selectedTail !== ''){
+          tempTail.push(item.selectedTail);
+        }
+        item.selectedTail = { label: '', value: null };
+        this.picklistMaps.set(item.listTag, tempTail);
+        item.sysTailWrappers = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag)));
+    });
+    this.apgTails = dataClone;
   }
 
 }
