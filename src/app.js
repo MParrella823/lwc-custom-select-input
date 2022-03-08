@@ -142,35 +142,25 @@ export default class App extends LightningElement {
       tailClone = picklistClone.filter(tail => tail.value !== event.target.value);
       this.picklistMaps.set(item.listTag,tailClone);
       item.sysTailWrappers = this.picklistMaps.get(item.listTag);
-    });
-    
-    this.apgTails = JSON.parse(JSON.stringify(dataClone));
-    console.log('data: ', this.apgTails);  
-    
+    });    
+    this.apgTails = JSON.parse(JSON.stringify(dataClone));    
   }
 
   handleIconClick(event){
     let dataClone = [];
     let tailClone = [];
     dataClone = JSON.parse(JSON.stringify(this.apgTails));
-    let picklistClone = [];
-    let selectedListTag;
     dataClone.forEach(item => {
       if (item.quoteLineId === event.target.dataset.id){
         selectedListTag = item.listTag;
         item.isRegistered = false;
         picklistClone = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag)));
         tailClone = this.picklistMaps.get(item.listTag);
-        console.log('existing tailClone: ', tailClone);
         tailClone.push(item.selectedTail);
-        console.log('updated tailClone: ', tailClone);
         item.selectedTail = {label: '', value: null};
         this.picklistMaps.set(item.listTag, tailClone);
       }
-      
-      console.log('final list tag: ', this.picklistMaps.get(item.listTag));
       item.sysTailWrappers = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag)));
-
     });
     this.apgTails = dataClone;
     
