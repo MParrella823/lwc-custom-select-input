@@ -82,8 +82,8 @@ let testQuoteLineData = [
 ];
 
 let mockedListSortData = new Map();
-mockedListSortData.set('RocketRoute|PLANE1|PRODUCT1', [{label: 'rrtest', value: 'rrtest1'}, {label: 'rrtest2', value: 'rrtest2'}]);
-mockedListSortData.set('APG|PLANE1|PRODUCT1', [{label: 'apgtest1', value: 'apgtest1'}, {label: 'apgtest2', value:'apgtest2'}]);
+mockedListSortData.set('RocketRoute|PLANE1|PRODUCT1',rrSelectOptions);
+mockedListSortData.set('APG|PLANE1|PRODUCT1', apgSelectOptions);
 
 
 export default class App extends LightningElement {
@@ -95,7 +95,9 @@ export default class App extends LightningElement {
   selected;
 
   connectedCallback(){
-    apgSelectOptions.forEach(item => {
+    let allTails = [];
+    allTails = [...apgSelectOptions, ...rrSelectOptions];
+    allTails.forEach(item => {
       this.tailNameMap.set(item.value, item.label);
     });
 
