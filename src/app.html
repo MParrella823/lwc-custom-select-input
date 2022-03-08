@@ -35,7 +35,7 @@
 					<td key={record.quoteLineId} class="tail-dropdown">
 						<lightning-combobox name="availableTails" label="System Tail" value={record.selectedTail.value}
 							placeholder="Select a System Tail" options={record.sysTailWrappers} onchange={handleChange}
-							data-id={record.quoteLineId} variant="label-hidden" disabled={record.isRegistered}>
+							data-id={record.quoteLineId} variant="label-hidden" onfocus={handleFocus} disabled={record.isRegistered}>
 						</lightning-combobox>
 					</td>
 					<td key={record.quoteLineId} class="selected-tail">
