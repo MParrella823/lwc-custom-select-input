@@ -16,7 +16,14 @@
 					<div class="theadText" title="Selected System Tail">Selected System Tail</div>
 				</th>
 				<th scope="col" class="slds-cell-wrap">
-					<div class="theadText" title="remove">Clear Assignment</div>
+					<div class="theadText" title="remove">
+						Clear Assignment
+						<span class="slds-p-left_small">
+							<lightning-icon icon-name="action:delete" alternative-text="Clear All Tails" title="Delete" size="xx-small"
+								onclick={handleClearAll}>
+							</lightning-icon>
+						</span>
+					</div>
 				</th>
 			</tr>
 		</thead>
