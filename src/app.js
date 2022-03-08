@@ -110,7 +110,6 @@ export default class App extends LightningElement {
     dataClone.forEach(item =>{
       if (mockedListSortData.has(item.listTag)){
         this.picklistMaps.set(item.listTag, mockedListSortData.get(item.listTag));
-        this.origPicklistMaps.set(item.listTag, mockedListSortData.get(item.listTag));
       }
     });
 
