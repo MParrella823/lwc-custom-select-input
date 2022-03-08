@@ -92,8 +92,6 @@ export default class App extends LightningElement {
   apgTails = testQuoteLineData;
   tailNameMap = new Map();
   picklistMaps = new Map();
-  origPicklistMaps = new Map();
-  selected;
 
   connectedCallback(){
 
@@ -121,16 +119,14 @@ export default class App extends LightningElement {
     // Iterate over the quote lines and set the select options to the appropriate list from the 'picklistMap'
     dataClone.forEach(item => {
       item.sysTailWrappers = this.picklistMaps.get(item.listTag);
-    })
+    });
 
     // Update the tracked var so it causes a re-render
     this.apgTails = dataClone;
-
   }
 
   handleChange(event){
     let tailClone = [];
-    this.selected = event.target.value;
     let dataClone = [];
     dataClone = JSON.parse(JSON.stringify(this.apgTails));
     dataClone.forEach(item => {
