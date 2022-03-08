@@ -149,13 +149,10 @@ export default class App extends LightningElement {
   handleIconClick(event){
     let dataClone = [];
     let tailClone = [];
-    let selectedListTag;
     dataClone = JSON.parse(JSON.stringify(this.apgTails));
     dataClone.forEach(item => {
       if (item.quoteLineId === event.target.dataset.id){
-        selectedListTag = item.listTag;
         item.isRegistered = false;
-        picklistClone = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag)));
         tailClone = this.picklistMaps.get(item.listTag);
         tailClone.push(item.selectedTail);
         item.selectedTail = {label: '', value: null};
@@ -163,11 +160,19 @@ export default class App extends LightningElement {
       }
       item.sysTailWrappers = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag)));
     });
-    this.apgTails = dataClone;
-    
-    
+    this.apgTails = dataClone;  
+  }
 
-   
+  
+  handleFocus(event){
+    let dataClone = [];
+     dataClone = JSON.parse(JSON.stringify(this.apgTails));
+     dataClone.forEach(item => {
+       if (item.quoteLineId === event.target.dataset.id){
+         item.sysTailWrappers = this.picklistMaps.get(item.listTag);
+       }
+     });
+     this.apgTails = dataClone;
   }
 
 }
