@@ -82,8 +82,8 @@ let testQuoteLineData = [
 ];
 
 let mockedListSortData = new Map();
-mockedListSortData.set('RocketRoute|PLANE1|PRODUCT1', [{label: 'rrtest', value: 'rrtest1'}, {label: 'rrtest2', value: 'rrtest2'}]);
-mockedListSortData.set('APG|PLANE1|PRODUCT1', [{label: 'apgtest1', value: 'apgtest1'}, {label: 'apgtest2', value:'apgtest2'}]);
+mockedListSortData.set('RocketRoute|PLANE1|PRODUCT1',rrSelectOptions);
+mockedListSortData.set('APG|PLANE1|PRODUCT1', apgSelectOptions);
 
 
 export default class App extends LightningElement {
@@ -95,10 +95,17 @@ export default class App extends LightningElement {
   selected;
 
   connectedCallback(){
-    apgSelectOptions.forEach(item => {
+
+    // Populate tail map with tailId -> tailName so we can easily display the tail name
+    let allTails = [];
+    allTails = [...apgSelectOptions, ...rrSelectOptions];
+    allTails.forEach(item => {
       this.tailNameMap.set(item.value, item.label);
     });
 
+    // Setup the "picklistMap" which will be a map with the following format:
+    // key: record.listTag (combination of productFamily_productId_aircraftId)
+    // value: a list of available system tails that are compatible with that specific productFamily/productId/aircraftId combination
     let dataClone = [];
     dataClone = JSON.parse(JSON.stringify(this.apgTails));
     dataClone.forEach(item =>{
@@ -107,15 +114,13 @@ export default class App extends LightningElement {
       }
     });
 
+    // Iterate over the quote lines and set the select options to the appropriate list from the 'picklistMap'
     dataClone.forEach(item => {
       item.sysTailWrappers = this.picklistMaps.get(item.listTag);
     })
 
+    // Update the tracked var so it causes a re-render
     this.apgTails = dataClone;
-    this.picklistMaps.forEach((item,key) => {
-      // let test = JSON.parse(JSON.stringify(item));
-      console.log(`Key: ${key}  |  Value: ${item}`);
-    });
 
   }
 
@@ -131,20 +136,41 @@ export default class App extends LightningElement {
           value : event.target.value,
           label : this.tailNameMap.get(event.target.value)
         };          
-        tailClone = this.picklistMaps.get(item.listTag).filter(item => item.value !== event.target.value);
-      } // End row-level edits      
-        this.picklistMaps.set(item.listTag,tailClone);
+      } // End row-level edits   
+      let picklistClone = [];
+      picklistClone = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag))); 
+      tailClone = picklistClone.filter(tail => tail.value !== event.target.value);
+      this.picklistMaps.set(item.listTag,tailClone);
+      item.sysTailWrappers = this.picklistMaps.get(item.listTag);
     });
     
-    this.apgTails = dataClone;  
+    this.apgTails = JSON.parse(JSON.stringify(dataClone));
+    console.log('data: ', this.apgTails);  
     
   }
 
   handleIconClick(event){
     let dataClone = [];
     let tailClone = [];
+    dataClone = JSON.parse(JSON.stringify(this.apgTails));
+    let picklistClone = [];
+    dataClone.forEach(item => {
+      if (item.quoteLineId === event.target.dataset.id){
+        item.isRegistered = false;
+        picklistClone = JSON.parse(JSON.stringify(this.picklistMaps.get(item.listTag)));
+        tailClone = this.picklistMaps.get(item.listTag);
+        tailClone.push(item.selectedTail);
+        item.selectedTail = {label: '', value: null};
+      }
+      
+    this.picklistMaps.set(item.listTag, tailClone);
+    item.sysTailWrappers = this.picklistMaps.get(item.listTag);
+
+    });
+    this.apgTails = dataClone;
     
-    dataClone = JSON.parse(JSON.stringify(this.testQuoteLineData));
+    
+
    
   }
 
