@@ -149,6 +149,7 @@ export default class App extends LightningElement {
   handleIconClick(event){
     let dataClone = [];
     let tailClone = [];
+    let selectedListTag;
     dataClone = JSON.parse(JSON.stringify(this.apgTails));
     dataClone.forEach(item => {
       if (item.quoteLineId === event.target.dataset.id){
