@@ -181,7 +181,6 @@ export default class App extends LightningElement {
         item.isRegistered = false;
         let tempTail = [];
         tempTail = this.picklistMaps.get(item.listTag);
-        console.log('selectedTail: ', item.selectedTail);
         if (item.selectedTail.label !== '' && item.selectedTail.value !== ''){
           tempTail.push(item.selectedTail);
           item.selectedTail = { label: '', value: null };
